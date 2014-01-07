@@ -1,7 +1,7 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# Should be renamed to .vars
+# Should be renamed to .Vagrantfilerc.rb
 
 module MyLocalVars
 
