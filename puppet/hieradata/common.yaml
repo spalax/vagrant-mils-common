@@ -20,6 +20,7 @@ server:
             bash_aliases: null
     _prevent_empty: ''
 nginx:
+    access_log: off
     types_hash_max_size: '2048'
     types_hash_bucket_size: '64'
     server_names_hash_bucket_size: '64'  
