@@ -1,3 +1,8 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Should be renamed to .vars
+
 module MyLocalVars
 
     MY_IP = "192.168.98.170"
