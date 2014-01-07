@@ -1,17 +1,27 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+require '../vars.rb'
+include MyLocalVars
+
 Vagrant.configure("2") do |config|
   config.vm.box = "debian-wheezy72-x64-vbox43"
   config.vm.box_url = "http://box.puphpet.com/debian-wheezy72-x64-vbox43.box"
 
-  config.vm.network "private_network", ip: "{replaceme-ip}"
-  config.vm.hostname = "{replaceme-hostname}"
+  config.vm.network "private_network", ip: MY_IP
+  config.vm.hostname = MY_HOSTNAME
 
-  config.vm.synced_folder "./", "/var/www", id: "vagrant-root", :nfs => true
+  config.vm.synced_folder "./", "/var/www", id: "vagrant-root", :nfs => true, :map_uid => 0, :map_gid => 0
 
   config.vm.usable_port_range = (2200..2250)
   config.vm.provider :virtualbox do |virtualbox|
-    virtualbox.customize ["modifyvm", :id, "--name", "{replaceme}-box"]
+    virtualbox.customize ["modifyvm", :id, "--name", MY_VBOX_NAME]
     virtualbox.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
-    virtualbox.customize ["modifyvm", :id, "--memory", "512"]
+    if MY_VBOX_MEMORY >= 512
+      virtualbox.customize ["modifyvm", :id, "--memory", MY_VBOX_MEMORY]
+    else
+      virtualbox.customize ["modifyvm", :id, "--memory", "512"]
+    end
     virtualbox.customize ["modifyvm", :id, "--cpus", `awk "/^processor/ {++n} END {print n}" /proc/cpuinfo 2> /dev/null || sh -c 'sysctl hw.logicalcpu 2> /dev/null || echo ": 2"' | awk \'{print \$2}\' `.chomp ]
     virtualbox.customize ["setextradata", :id, "--VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root", "1"]
   end

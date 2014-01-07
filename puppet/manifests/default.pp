@@ -187,6 +187,7 @@ exec { "exec mkdir -p ${webroot_location}":
 if ! defined(File[$webroot_location]) {
   file { $webroot_location:
     ensure  => directory,
+    owner    => $::ssh_username,
     group   => 'www-data',
     mode    => 0775,
     require => [
@@ -498,7 +499,7 @@ if $mysql_values['phpmyadmin'] == 1 and is_hash($php_values) {
   file { "${mysql_webroot_location}/phpmyadmin":
     target  => "/usr/share/${phpMyAdmin_folder}",
     ensure  => link,
-    replace => 'no',
+    replace => 'yes',
     require => [
       Package[$phpMyAdmin_package],
       File[$mysql_webroot_location]

@@ -1,0 +1,8 @@
+module MyLocalVars
+
+    MY_IP = "192.168.98.170"
+    MY_HOSTNAME = "fedya.com"
+    MY_VBOX_NAME = "fedya-box"
+    MY_VBOX_MEMORY = 1024
+
+end
