@@ -2,7 +2,7 @@ Vagrant.configure("2") do |config|
   config.vm.box = "debian-wheezy72-x64-vbox43"
   config.vm.box_url = "http://box.puphpet.com/debian-wheezy72-x64-vbox43.box"
 
-  config.vm.network "private_network", ip: "192.168.57.10"
+  config.vm.network "private_network", ip: "192.168.70.11"
   config.vm.hostname = "common.in"
 
   config.vm.synced_folder "./", "/var/www", id: "vagrant-root", :nfs => false
