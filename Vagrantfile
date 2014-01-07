@@ -10,6 +10,10 @@ Vagrant.configure("2") do |config|
 
   config.vm.network "private_network", ip: MY_IP
   config.vm.hostname = MY_HOSTNAME
+  
+  if MY_HOST_ALIASES
+     config.hostsupdater.aliases = MY_HOST_ALIASES
+  end
 
   config.vm.synced_folder "./", "/var/www", id: "vagrant-root", :nfs => true, :map_uid => 0, :map_gid => 0
 

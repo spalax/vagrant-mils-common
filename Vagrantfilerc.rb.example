@@ -9,5 +9,5 @@ module MyLocalVars
     MY_HOSTNAME = "fedya.com"
     MY_VBOX_NAME = "fedya-box"
     MY_VBOX_MEMORY = 1024
-
+    MY_HOST_ALIASES = ["en.fedya.com", "ru.fedya.com"]
 end
