@@ -9,7 +9,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.usable_port_range = (2200..2250)
   config.vm.provider :virtualbox do |virtualbox|
-    virtualbox.customize ["modifyvm", :id, "--name", "common-box"]
+    virtualbox.customize ["modifyvm", :id, "--name", "{replaceme}-box"]
     virtualbox.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
     virtualbox.customize ["modifyvm", :id, "--memory", "512"]
     virtualbox.customize ["modifyvm", :id, "--cpus", `awk "/^processor/ {++n} END {print n}" /proc/cpuinfo 2> /dev/null || sh -c 'sysctl hw.logicalcpu 2> /dev/null || echo ": 2"' | awk \'{print \$2}\' `.chomp ]
@@ -26,7 +26,7 @@ Vagrant.configure("2") do |config|
 
     puppet.manifests_path = ".puppet/puppet/manifests"
     puppet.module_path    = ".puppet/puppet/modules"
-    puppet.options = ["--verbose", "--debug", "--hiera_config /vagrant/.puppet/hiera.yaml", "--parser future"]
+    puppet.options = ["--verbose", "--hiera_config /vagrant/.puppet/hiera.yaml", "--parser future"]
   end
 
   config.ssh.username = "vagrant"
