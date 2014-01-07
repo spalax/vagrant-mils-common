@@ -1,0 +1,40 @@
+ server {
+    listen                80;
+    server_name           localhost;
+
+    access_log            /var/log/nginx/host.access.log;
+    error_log             /var/log/nginx/host.error.log;
+
+    root        <%= @webroot %>;
+   
+    location ~ ^/\. {
+        deny all;
+    }
+
+    index /@zf;
+
+    try_files $uri $uri/ @zf;
+
+    error_page 403 404 502 503 504 = @zf;
+    
+    location ~ \.php$ {
+        try_files $uri @zf;
+        fastcgi_param PATH_INFO $fastcgi_path_info;
+        fastcgi_param PATH_TRANSLATED $document_root$fastcgi_path_info;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param HTTP_RANGE $http_range;
+        fastcgi_pass  <%= @fastcgi_pass %>;
+        include         fastcgi_params;
+    }
+    
+    location @zf {
+        fastcgi_param PATH_INFO $fastcgi_path_info;
+        fastcgi_param PATH_TRANSLATED $document_root$fastcgi_path_info;
+        fastcgi_param HTTP_RANGE $http_range;
+        fastcgi_pass  <%= @fastcgi_pass %>;
+        fastcgi_param   SCRIPT_FILENAME $document_root/index.php;
+#        fastcgi_param   APPLICATION_ENV development;
+        include         fastcgi_params;
+    }
+ }
+
