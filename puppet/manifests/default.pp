@@ -499,7 +499,7 @@ if $mysql_values['phpmyadmin'] == 1 and is_hash($php_values) {
   file { "${mysql_webroot_location}/phpmyadmin":
     target  => "/usr/share/${phpMyAdmin_folder}",
     ensure  => link,
-    replace => 'yes',
+    replace => 'no',
     require => [
       Package[$phpMyAdmin_package],
       File[$mysql_webroot_location]
