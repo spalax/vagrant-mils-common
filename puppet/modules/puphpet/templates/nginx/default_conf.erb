@@ -6,35 +6,31 @@
     error_log             /var/log/nginx/host.error.log;
 
     root        <%= @webroot %>;
-   
+
+    location ~* \.(?:ico|css|js|gif|jpe?g|png)$ {
+       expires 30d;
+       add_header Pragma public;
+       add_header Cache-Control "public";
+    } 
+
     location ~ ^/\. {
         deny all;
     }
 
-    index /@zf;
+    error_page 403 404 502 503 504 = index.php;
 
-    try_files $uri $uri/ @zf;
+    index index.html index.htm index.php;
+   
+    location / {
+       try_files $uri $uri/ /index.php$is_args$args;
+    }
 
-    error_page 403 404 502 503 504 = @zf;
-    
+    # PHP-FPM Support
     location ~ \.php$ {
-        try_files $uri @zf;
-        fastcgi_param PATH_INFO $fastcgi_path_info;
-        fastcgi_param PATH_TRANSLATED $document_root$fastcgi_path_info;
-        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         fastcgi_param HTTP_RANGE $http_range;
-        fastcgi_pass  <%= @fastcgi_pass %>;
-        include         fastcgi_params;
-    }
-    
-    location @zf {
-        fastcgi_param PATH_INFO $fastcgi_path_info;
-        fastcgi_param PATH_TRANSLATED $document_root$fastcgi_path_info;
-        fastcgi_param HTTP_RANGE $http_range;
-        fastcgi_pass  <%= @fastcgi_pass %>;
-        fastcgi_param   SCRIPT_FILENAME $document_root/index.php;
-#        fastcgi_param   APPLICATION_ENV development;
-        include         fastcgi_params;
-    }
+        fastcgi_pass <%= @fastcgi_pass %>;
+        fastcgi_param  SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_index index.php;
+        include fastcgi_params;
+    } 
  }
-
