@@ -206,7 +206,9 @@ if $php_values['version'] == undef {
   $fastcgi_pass = "unix:${php5_fpm_sock}"
 }
 
-class { 'nginx': }
+class { 'nginx': 
+    worker_processes => '2'
+}
 
 if $::osfamily == 'redhat' and ! defined(Iptables::Allow['tcp/80']) {
   iptables::allow { 'tcp/80':

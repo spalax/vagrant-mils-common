@@ -2,16 +2,17 @@ Vagrant.configure("2") do |config|
   config.vm.box = "debian-wheezy72-x64-vbox43"
   config.vm.box_url = "http://box.puphpet.com/debian-wheezy72-x64-vbox43.box"
 
-  config.vm.network "private_network", ip: "192.168.70.11"
-  config.vm.hostname = "common.in"
+  config.vm.network "private_network", ip: "{replaceme-ip}"
+  config.vm.hostname = "{replaceme-hostname}"
 
-  config.vm.synced_folder "./", "/var/www", id: "vagrant-root", :nfs => false
+  config.vm.synced_folder "./", "/var/www", id: "vagrant-root", :nfs => true
 
   config.vm.usable_port_range = (2200..2250)
   config.vm.provider :virtualbox do |virtualbox|
     virtualbox.customize ["modifyvm", :id, "--name", "common-box"]
     virtualbox.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
     virtualbox.customize ["modifyvm", :id, "--memory", "512"]
+    virtualbox.customize ["modifyvm", :id, "--cpus", `awk "/^processor/ {++n} END {print n}" /proc/cpuinfo 2> /dev/null || sh -c 'sysctl hw.logicalcpu 2> /dev/null || echo ": 2"' | awk \'{print \$2}\' `.chomp ]
     virtualbox.customize ["setextradata", :id, "--VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root", "1"]
   end
 
