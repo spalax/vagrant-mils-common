@@ -61,3 +61,4 @@ mysql:
             host: localhost
             user: spalax
             password: spalax
+            sql_file: /var/www/schema/db.sql
