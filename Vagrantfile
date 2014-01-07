@@ -1,7 +1,7 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-require '.vars'
+require './.Vagrantfilerc.rb'
 include MyLocalVars
 
 Vagrant.configure("2") do |config|
