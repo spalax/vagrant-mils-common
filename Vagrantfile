@@ -9,8 +9,11 @@ Vagrant.configure("2") do |config|
   config.vm.box_url = "http://box.puphpet.com/debian-wheezy72-x64-vbox43.box"
 
   config.vm.network "private_network", ip: MY_IP
-  config.vm.hostname = MY_HOSTNAME
+  if MY_PUBLIC_NETWORK_ENABLED
+    config.vm.network "public_network", :bridge => 'en0: Wi-Fi (AirPort)'
+  end
   
+  config.vm.hostname = MY_HOSTNAME
   if MY_HOST_ALIASES
      config.hostsupdater.aliases = MY_HOST_ALIASES
   end
