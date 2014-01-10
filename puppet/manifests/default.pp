@@ -20,7 +20,7 @@ user { $::ssh_username:
   ensure => present
 }
 
-user { ['apache', 'nginx', 'httpd', 'www-data']:
+user { ['nginx', 'www-data']:
   shell  => '/bin/bash',
   ensure => present,
   groups => 'www-data',
@@ -242,10 +242,6 @@ if $php_values == undef {
   $php_values = hiera('php', false)
 }
 
-if $apache_values == undef {
-  $apache_values = hiera('apache', false)
-}
-
 if $nginx_values == undef {
   $nginx_values = hiera('nginx', false)
 }
@@ -410,15 +406,11 @@ if $php_values == undef {
   $php_values = hiera('php', false)
 }
 
-if $apache_values == undef {
-  $apache_values = hiera('apache', false)
-}
-
 if $nginx_values == undef {
   $nginx_values = hiera('nginx', false)
 }
 
-if is_hash($apache_values) or is_hash($nginx_values) {
+if is_hash($nginx_values) {
   $mysql_webserver_restart = true
 } else {
   $mysql_webserver_restart = false
@@ -490,9 +482,20 @@ if $mysql_values['phpmyadmin'] == 1 and is_hash($php_values) {
 
   if is_hash($nginx_values) {
     $mysql_webroot_location = $puphpet::params::nginx_webroot_location
+    if $::aliases == 1 {
+       $ali = true
+    } else {
+       $ali = false
+    }
+
+    notify { 'ALIASES VALUE': 
+      withpath => true,
+      name     => "my ali value is $ali",
+    }
 
     mysql_nginx_default_conf { 'override_default_conf':
-      webroot => $mysql_webroot_location
+      webroot => $mysql_webroot_location,
+      aliases => $ali
     }
   }
 
@@ -508,7 +511,8 @@ if $mysql_values['phpmyadmin'] == 1 and is_hash($php_values) {
 }
 
 define mysql_nginx_default_conf (
-  $webroot
+  $webroot,
+  $aliases = false
 ) {
   if $php5_fpm_sock == undef {
     $php5_fpm_sock = '/var/run/php5-fpm.sock'
@@ -521,9 +525,14 @@ define mysql_nginx_default_conf (
       default => "unix:${php5_fpm_sock}"
     }
   }
+   notify { 'SECOND ALIASES VALUE': 
+      withpath => true,
+      name     => "second aliases value is $aliases",
+    }
 
   class { 'puphpet::nginx':
     fastcgi_pass => $fastcgi_pass,
+    aliases => $aliases,
     notify       => Class['nginx::service'],
   }
 }

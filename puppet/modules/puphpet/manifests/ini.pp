@@ -8,9 +8,6 @@ define puphpet::ini (
   ) {
 
   $real_webserver = $webserver ? {
-    'apache'   => 'apache2',
-    'httpd'    => 'apache2',
-    'apache2'  => 'apache2',
     'nginx'    => 'fpm',
     'php5-fpm' => 'fpm',
     'php-fpm'  => 'fpm',
@@ -93,7 +90,6 @@ define puphpet::ini (
           $target_file = "${target_dir}/${ini_filename}"
 
           $webserver_ini_location = $real_webserver ? {
-              'apache2' => '/etc/php5/apache2/conf.d',
               'fpm'     => '/etc/php5/fpm/conf.d',
           }
           $cli_ini_location = '/etc/php5/cli/conf.d'

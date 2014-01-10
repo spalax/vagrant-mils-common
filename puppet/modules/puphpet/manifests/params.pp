@@ -5,11 +5,6 @@ class puphpet::params {
     'Redhat' => 'php-pecl-xdebug'
   }
 
-  $apache_webroot_location = $::osfamily ? {
-    'Debian' => '/var/www/public',
-    'Redhat' => '/var/www/public'
-  }
-
   $nginx_webroot_location = $::osfamily ? {
     'Debian' => '/var/www/public',
     'Redhat' => '/var/www/public'

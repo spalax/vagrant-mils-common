@@ -32,5 +32,6 @@
         fastcgi_param  SCRIPT_FILENAME $document_root$fastcgi_script_name;
         fastcgi_index index.php;
         include fastcgi_params;
+        <%= @template_string %>
     } 
  }
