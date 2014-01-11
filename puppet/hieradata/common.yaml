@@ -26,7 +26,6 @@ nginx:
     server_names_hash_bucket_size: '64'  
 php:
     version: '55'
-    composer: '1'
     modules:
         php:
             - cli

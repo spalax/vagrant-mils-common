@@ -80,3 +80,15 @@ else
     cd "$PUPPET_DIR" && librarian-puppet update >/dev/null
     echo 'Finished running update librarian-puppet'
 fi
+
+echo "Copying local modules to the $PUPPET_DIR/modules path";
+for x in "$(ls -l /vagrant/.puppet/puppet/modules | awk '{print $9}')";
+do
+  x=`echo $x | tr -d " " | tr -d "\r" | tr -d "\n"`;
+  cp -r /vagrant/.puppet/puppet/modules/$x $PUPPET_DIR/modules/;
+  if [ -d "$PUPPET_DIR/modules/$x" ]; then
+     echo "Local module $x copied successfully";
+  else
+     echo "[FAILED] Could not copy local module $x"
+  fi
+done

@@ -180,8 +180,19 @@ include puphpet::params
 $webroot_location = $puphpet::params::nginx_webroot_location
 
 exec { "exec mkdir -p ${webroot_location}":
-  command => "mkdir -p ${webroot_location}",
-  onlyif  => "test -d ${webroot_location}",
+    command => "mkdir -p ${webroot_location}",
+    onlyif  => "test -d ${webroot_location}"
+}
+
+Class['Php'] -> Class['Php::Devel'] -> file { "/vagrant/composer.phar":
+    ensure => file
+} -> exec { "exec rm -rf /vagrant/vendor":
+    command => "rm -rf /vagrant/vendor && rm -rf /vagrant/composer.lock",
+    user => root
+} -> exec { "exec php /vagrant/composer.phar update":
+    cwd => "/vagrant",
+    environment => ["COMPOSER_HOME='/vagrant'"],
+    command => "/usr/bin/php /vagrant/composer.phar update"
 }
 
 if ! defined(File[$webroot_location]) {
@@ -354,19 +365,6 @@ define php_pecl_mod {
   }
 }
 
-if $php_values['composer'] == 1 {
-  class { 'composer':
-    target_dir      => '/usr/local/bin',
-    composer_file   => 'composer',
-    download_method => 'curl',
-    logoutput       => false,
-    tmp_path        => '/tmp',
-    php_package     => "${php::params::module_prefix}cli",
-    curl_package    => 'curl',
-    suhosin_enabled => false,
-  }
-}
-
 ## Begin Xdebug manifest
 
 if $xdebug_values == undef {
@@ -488,11 +486,6 @@ if $mysql_values['phpmyadmin'] == 1 and is_hash($php_values) {
        $ali = false
     }
 
-    notify { 'ALIASES VALUE': 
-      withpath => true,
-      name     => "my ali value is $ali",
-    }
-
     mysql_nginx_default_conf { 'override_default_conf':
       webroot => $mysql_webroot_location,
       aliases => $ali
@@ -525,10 +518,6 @@ define mysql_nginx_default_conf (
       default => "unix:${php5_fpm_sock}"
     }
   }
-   notify { 'SECOND ALIASES VALUE': 
-      withpath => true,
-      name     => "second aliases value is $aliases",
-    }
 
   class { 'puphpet::nginx':
     fastcgi_pass => $fastcgi_pass,
