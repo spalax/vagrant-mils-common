@@ -184,17 +184,6 @@ exec { "exec mkdir -p ${webroot_location}":
     onlyif  => "test -d ${webroot_location}"
 }
 
-Class['Php'] -> Class['Php::Devel'] -> file { "/vagrant/composer.phar":
-    ensure => file
-} -> exec { "exec rm -rf /vagrant/vendor":
-    command => "rm -rf /vagrant/vendor && rm -rf /vagrant/composer.lock",
-    user => root
-} -> exec { "exec php /vagrant/composer.phar update":
-    cwd => "/vagrant",
-    environment => ["COMPOSER_HOME='/vagrant'"],
-    command => "/usr/bin/php /vagrant/composer.phar update"
-}
-
 if ! defined(File[$webroot_location]) {
   file { $webroot_location:
     ensure  => directory,
@@ -364,6 +353,33 @@ define php_pecl_mod {
     service_autorestart => $php_webserver_restart,
   }
 }
+
+exec { "apt-update":
+    command => "/usr/bin/apt-get update"
+}
+
+$dependencies = [
+    "php5",
+    "php5-curl"
+]
+
+Class['apt'] -> Class['Php'] -> Class['Php::Devel'] -> Php::Module <| |> -> Php::Pear::Module <| |> -> Php::Pecl::Module <| |> -> exec { "exec apt-get install -y curl":
+    command => "apt-get install -y curl",
+    path => [ '/bin', '/sbin', '/usr/bin', '/usr/sbin' ],
+    user => root
+} -> file { "${::sync_dir}/composer.phar":
+    ensure => file
+} -> package { $dependencies:
+    ensure  => present,
+    require => Exec['apt-update'],
+} -> php_mod { 'curl': } -> exec { "exec php ${::sync_dir}/composer.phar update":
+    cwd => "${::sync_dir}",
+    environment => ["COMPOSER_HOME=${::sync_dir}"],
+    command => "/usr/bin/php ${::sync_dir}/composer.phar update",
+    require => [ Package['php'] ]
+}
+
+
 
 ## Begin Xdebug manifest
 

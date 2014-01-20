@@ -30,7 +30,6 @@ php:
         php:
             - cli
             - intl
-            - curl
             - mysql
             - mcrypt
         pear: {  }

@@ -1,0 +1,33 @@
+[submodule "puppet/modules/stdlib"]
+	path = puppet/modules/stdlib
+	url = git://github.com/puphpet/puppetlabs-stdlib.git
+[submodule "puppet/modules/concat"]
+	path = puppet/modules/concat
+	url = git://github.com/puphpet/puppetlabs-concat.git
+[submodule "puppet/modules/apt"]
+	path = puppet/modules/apt
+	url = git://github.com/puphpet/puppetlabs-apt.git
+[submodule "puppet/modules/yum"]
+	path = puppet/modules/yum
+	url = git://github.com/puphpet/puppet-yum.git
+[submodule "puppet/modules/vcsrepo"]
+	path = puppet/modules/vcsrepo
+	url = git://github.com/puphpet/puppetlabs-vcsrepo.git
+[submodule "puppet/modules/ntp"]
+	path = puppet/modules/ntp
+	url = git://github.com/puphpet/puppetlabs-ntp.git
+[submodule "puppet/modules/iptables"]
+	path = puppet/modules/iptables
+	url = git://github.com/puphpet/puppet-iptables.git
+[submodule "puppet/modules/nginx"]
+	path = puppet/modules/nginx
+	url = git://github.com/spalax/puppet-nginx.git
+[submodule "puppet/modules/php"]
+	path = puppet/modules/php
+	url = git://github.com/puphpet/puppet-php.git
+[submodule "puppet/modules/mysql"]
+	path = puppet/modules/mysql
+	url = git://github.com/puphpet/puppetlabs-mysql.git
+[submodule "puppet/modules/puppi"]
+	path = puppet/modules/puppi
+	url = https://github.com/example42/puppi.git
