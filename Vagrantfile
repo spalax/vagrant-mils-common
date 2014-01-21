@@ -35,10 +35,10 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision :shell, :path => ".puppet/shell/initial-setup.sh"
   config.vm.provision :shell, :path => ".puppet/shell/update-puppet.sh"
-  config.vm.provision :shell, :path => ".puppet/shell/librarian-puppet-vagrant.sh"
   config.vm.provision :puppet do |puppet|
     puppet.facter = {
-      "ssh_username" => "vagrant"
+      "ssh_username" => "vagrant",
+      "sync_dir" => "/var/www"
     }
 
     if MY_HOST_ALIASES
@@ -46,6 +46,8 @@ Vagrant.configure("2") do |config|
     end
 
     puppet.manifests_path = ".puppet/puppet/manifests"
+    puppet.module_path = ".puppet/puppet/modules"
+
     puppet.options = ["--verbose", "--hiera_config /vagrant/.puppet/hiera.yaml", "--parser future"]
   end
 
