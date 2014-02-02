@@ -208,7 +208,23 @@ if $php_values['version'] == undef {
 }
 
 class { 'nginx': 
-    worker_processes => '2'
+    worker_processes => '2',
+   
+    types_hash_max_size => '2048',
+    types_hash_bucket_size => '64',
+    names_hash_bucket_size => '128',
+ 
+    http_cfg_append => {
+        fastcgi_buffer_size => '128k',
+        fastcgi_buffers => '4 256k',
+        fastcgi_busy_buffers_size => '256k'
+    },
+
+    proxy_buffers => '4 256k',
+    proxy_buffer_size => '128k',
+    proxy_cfg_append => {
+        proxy_busy_buffers_size => '256k'
+    }
 }
 
 if $::osfamily == 'redhat' and ! defined(Iptables::Allow['tcp/80']) {
