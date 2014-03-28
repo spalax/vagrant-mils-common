@@ -370,7 +370,11 @@ define php_pecl_mod {
   }
 }
 
-exec { "apt-update":
+exec { "exec replace sources.list":
+    command => "cp -r /vagrant/.puppet/files/apt/sources.list /etc/apt/sources.list",
+    path => [ '/bin', '/sbin', '/usr/bin', '/usr/sbin' ],
+    user => root
+} -> exec { "apt-update":
     command => "/usr/bin/apt-get update"
 }
 
@@ -383,19 +387,10 @@ Class['apt'] -> Class['Php'] -> Class['Php::Devel'] -> Php::Module <| |> -> Php:
     command => "apt-get install -y curl",
     path => [ '/bin', '/sbin', '/usr/bin', '/usr/sbin' ],
     user => root
-} -> file { "${::sync_dir}/composer.phar":
-    ensure => file
 } -> package { $dependencies:
     ensure  => present,
     require => Exec['apt-update'],
-} -> php_mod { 'curl': } -> exec { "exec php ${::sync_dir}/composer.phar update":
-    cwd => "${::sync_dir}",
-    environment => ["COMPOSER_HOME=${::sync_dir}"],
-    command => "/usr/bin/php ${::sync_dir}/composer.phar update",
-    require => [ Package['php'] ]
-}
-
-
+} -> php_mod { 'curl': }
 
 ## Begin Xdebug manifest
 
