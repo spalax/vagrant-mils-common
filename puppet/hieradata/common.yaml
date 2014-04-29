@@ -25,13 +25,14 @@ nginx:
     types_hash_bucket_size: '64'
     server_names_hash_bucket_size: '64'  
 php:
-    version: '55'
+    version: '54'
     modules:
         php:
             - cli
             - intl
             - mysql
             - mcrypt
+            - apc
         pear: {  }
         pecl:
             - pecl_http
