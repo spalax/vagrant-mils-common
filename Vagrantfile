@@ -18,7 +18,7 @@ Vagrant.configure("2") do |config|
      config.hostsupdater.aliases = MY_HOST_ALIASES
   end
 
-  config.vm.synced_folder "./", "/var/www", id: "vagrant-root", :nfs => true, :map_uid => 0, :map_gid => 0
+  config.vm.synced_folder "./", "/var/www", id: "vagrant-root", :nfs => true, :map_uid => 0, :map_gid => 0, :mount_options => ['actimeo=5']
 
   config.vm.usable_port_range = (2200..2250)
   config.vm.provider :virtualbox do |virtualbox|
